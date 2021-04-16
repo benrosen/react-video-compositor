@@ -1,5 +1,11 @@
 import { useEffect, useState } from "react";
 
+/**
+ * Invoke a callback function on an interval.
+ *
+ * @param {number} fps The number of times per second to invoke the function.
+ * @param {function} onUpdate The function to invoke.
+ */
 export default function useInterval(fps, onUpdate) {
   const [interval] = useState(1000 / fps);
 
