@@ -1,6 +1,19 @@
 import { useEffect } from "react";
 
 /**
+ * A callback function that is passed a newly-loaded MediaStream.
+ *
+ * @callback OnMediaStreamLoadedCallback
+ * @param {MediaStream} stream The loaded MediaStream.
+ */
+
+/**
+ * A callback function that is invoked before loading a MediaStream.
+ *
+ *  @callback OnMediaStreamLoadingCallback
+ */
+
+/**
  * Use a video stream from a video device.
  *
  * @module useVideoStream
