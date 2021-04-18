@@ -4,7 +4,7 @@
  * @module renderSolidColorBackground
  * @param {*} bodyPix The BodyPix SDK.
  * @param {*} canvasElement A reference to the target canvas element.
- * @param {string} color The CSS color string
+ * @param {Number[]} color An array of RGBA color values.
  * @param {*} net The net loaded from BodyPix.
  * @param {*} videoElement A reference to the source video element.
  */
