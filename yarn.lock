@@ -4327,6 +4327,11 @@
   dependencies:
     "buffer-indexof" "^1.0.0"
 
+"docdash@^1.2.0":
+  "integrity" "sha512-IYZbgYthPTspgqYeciRJNPhSwL51yer7HAwDXhF5p+H7mTDbPvY3PCk/QDjNxdPCpWkaJVFC4t7iCNB/t9E5Kw=="
+  "resolved" "https://registry.npmjs.org/docdash/-/docdash-1.2.0.tgz"
+  "version" "1.2.0"
+
 "doctrine@^2.1.0":
   "integrity" "sha512-35mSku4ZXK0vfCuHEDAwt55dg2jNajHZ1odvF+8SSr82EsZY4QmXfuWso8oEd8zRhVObSN18aM0CjSdoBX7zIw=="
   "resolved" "https://registry.npmjs.org/doctrine/-/doctrine-2.1.0.tgz"
