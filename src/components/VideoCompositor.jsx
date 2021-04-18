@@ -20,8 +20,8 @@ export default function VideoCompositor({
   style,
   videoTrackConstraints,
 }) {
-  const canvasElement = useRef();
-  const videoElement = useRef();
+  const canvasElement = useRef({ current: {} });
+  const videoElement = useRef({ current: {} });
 
   const [hasLoadedVideoData, setHasLoadedVideoData] = useState(false);
   const [{ width, height }, setVideoSettings] = useState({
