@@ -12,7 +12,7 @@ import { useCallback } from "react";
  * Render a background.
  *
  * @module useOnRenderBackgroundCallback
- * @param {string|HTMLElement} background The type of background to use. Supports a CSS color string, `"blur"`, a path to an image or video file, or a `<canvas />`, `<img />`, or `< video/>` element.
+ * @param {string|Object} background The type of background to use. Supports a CSS color string, `"blur"`, a path to an image or video file, or a reference to a `<canvas />`, `<img />`, or `< video/>` element.
  * @param {*} bodyPix The BodyPix SDK.
  * @param {*} net The net loaded from BodyPix.
  */
@@ -43,38 +43,40 @@ export default function useOnRenderBackgroundCallback(
           }
         }
 
-        if (background === "blur") {
-          return renderBokehBackground(
-            3,
-            bodyPix,
-            canvasElement,
-            1,
-            net,
-            videoElement
-          );
-        }
+        if (typeof background === "string") {
+          if (background === "blur") {
+            return renderBokehBackground(
+              3,
+              bodyPix,
+              canvasElement,
+              1,
+              net,
+              videoElement
+            );
+          }
 
-        if (isImagePath(background)) {
-          throw new NotImplementedError(
-            "Image path support is not yet implemented."
-          );
-        }
+          if (isImagePath(background)) {
+            throw new NotImplementedError(
+              "Image path support is not yet implemented."
+            );
+          }
 
-        if (isVideoPath(background)) {
-          throw new NotImplementedError(
-            "Video path support is not yet implemented."
-          );
-        }
+          if (isVideoPath(background)) {
+            throw new NotImplementedError(
+              "Video path support is not yet implemented."
+            );
+          }
 
-        const backgroundColor = colorString.get.rgb(background);
-        if (backgroundColor) {
-          return renderSolidColorBackground(
-            bodyPix,
-            canvasElement,
-            backgroundColor,
-            net,
-            videoElement
-          );
+          const backgroundColor = colorString.get.rgb(background);
+          if (backgroundColor) {
+            return renderSolidColorBackground(
+              bodyPix,
+              canvasElement,
+              backgroundColor,
+              net,
+              videoElement
+            );
+          }
         }
       } catch (error) {
         console.error(error);
