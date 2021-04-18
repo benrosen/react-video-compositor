@@ -8,10 +8,11 @@ import useVideoStream from "../hooks/useVideoStream";
 /**
  * Renders a video stream to a canvas and provides callback functions for background and foreground effects.
  *
- * @see useInterval for more on how the render loop works.
- * @see useVideoStream for more on how to return a MediaStream from a video device.
+ * @module VideoCompositor
+ * @see module:useInterval
+ * @see module:useVideoStream
  */
-export default function Compositor({
+export default function VideoCompositor({
   fps = 30,
   onCaptureStream,
   onRenderBackground,
@@ -22,7 +23,7 @@ export default function Compositor({
   const canvasElement = useRef();
   const videoElement = useRef();
 
-  const [hasLoadedVideoData, setHasLoadedVideoData] = useState();
+  const [hasLoadedVideoData, setHasLoadedVideoData] = useState(false);
   const [{ width, height }, setVideoSettings] = useState({
     width: undefined,
     height: undefined,

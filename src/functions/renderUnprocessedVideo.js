@@ -1,8 +1,9 @@
 /**
  * Render video to a canvas element.
  *
+ * @module renderUnprocessedVideo
  * @param {*} canvasElement The taget canvas element.
- * @param {*} videoElement The source video element.
+ * @param {*} videoElement A reference to the source video element.
  */
 export default function renderUnprocessedVideo(canvasElement, videoElement) {
   canvasElement.current
