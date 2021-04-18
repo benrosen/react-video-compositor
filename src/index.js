@@ -1,5 +1,3 @@
-import "./index.css";
-
 import * as tfjs from "@tensorflow/tfjs";
 
 import App from "./App";
