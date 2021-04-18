@@ -5912,6 +5912,11 @@
   "resolved" "https://registry.npmjs.org/ignore/-/ignore-5.1.8.tgz"
   "version" "5.1.8"
 
+"image-extensions@^1.1.0":
+  "integrity" "sha1-uOa/YDnfAFbjM1AqALZjejEF2JQ="
+  "resolved" "https://registry.npmjs.org/image-extensions/-/image-extensions-1.1.0.tgz"
+  "version" "1.1.0"
+
 "immer@8.0.1":
   "integrity" "sha512-aqXhGP7//Gui2+UrEtvxZxSquQVXTpZ7KDxfCcKAF3Vysvw0CViVaW9RZ1j1xlIYqaaaipBoqdqeibkc18PNvA=="
   "resolved" "https://registry.npmjs.org/immer/-/immer-8.0.1.tgz"
@@ -6227,6 +6232,13 @@
   dependencies:
     "is-extglob" "^2.1.1"
 
+"is-image@^3.0.0":
+  "integrity" "sha512-NNPLvwKZ/hqx1Wv+ayKvVeDOylIapVKSxK/guzmB9doAk0FEdK0KqFKbnwNbuMLEPqEY4NaBhxzB4e98fVOq2Q=="
+  "resolved" "https://registry.npmjs.org/is-image/-/is-image-3.0.0.tgz"
+  "version" "3.0.0"
+  dependencies:
+    "image-extensions" "^1.1.0"
+
 "is-module@^1.0.0":
   "integrity" "sha1-Mlj7afeMFNW4FdZkM2tM/7ZEFZE="
   "resolved" "https://registry.npmjs.org/is-module/-/is-module-1.0.0.tgz"
@@ -6351,6 +6363,13 @@
   "integrity" "sha1-5HnICFjfDBsR3dppQPlgEfzaSpo="
   "resolved" "https://registry.npmjs.org/is-typedarray/-/is-typedarray-1.0.0.tgz"
   "version" "1.0.0"
+
+"is-video@^1.0.1":
+  "integrity" "sha1-e8Z3YLAQPUArwfELtULxajaHdzs="
+  "resolved" "https://registry.npmjs.org/is-video/-/is-video-1.0.1.tgz"
+  "version" "1.0.1"
+  dependencies:
+    "video-extensions" "^1.0.0"
 
 "is-windows@^1.0.2":
   "integrity" "sha512-eXK1UInq2bPmjyX6e3VHIzMLobc4J94i4AWn+Hpq3OU5KkrRC96OAcR3PRJ/pGu6m8TRnBHP9dkXQVsT/COVIA=="
@@ -11370,6 +11389,11 @@
     "assert-plus" "^1.0.0"
     "core-util-is" "1.0.2"
     "extsprintf" "^1.2.0"
+
+"video-extensions@^1.0.0":
+  "integrity" "sha1-6qhrRfKahTwrhz6djiO1E3Epl9Y="
+  "resolved" "https://registry.npmjs.org/video-extensions/-/video-extensions-1.1.0.tgz"
+  "version" "1.1.0"
 
 "vm-browserify@^1.0.1":
   "integrity" "sha512-2ham8XPWTONajOR0ohOKOHXkm3+gaBmGut3SRuu75xLd/RRaY6vqgh8NBYYk7+RW3u5AtzPQZG8F10LHkl0lAQ=="
