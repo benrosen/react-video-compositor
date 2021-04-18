@@ -13,6 +13,8 @@ import useInterval from "../hooks/useInterval";
  * @todo foreground image path
  * @todo onRenderBackground & backgroundRenderers array [{key: (segmentation) => media for canvas }] & background="key"
  *
+ * @deprecated
+ *
  * https://dannadori.medium.com/virtual-background-with-amazon-chime-sdk-bodypix-23fb59ac8c64
  * https://github.com/FLECT-DEV-TEAM/LocalVideoEffector
  * https://blog.tensorflow.org/2019/11/updated-bodypix-2.html
