@@ -1,12 +1,9 @@
-import React, { useCallback } from "react";
-
 import Compositor from "./Compositor";
 import PropTypes from "prop-types";
-import colorString from "color-string";
-import renderBokehBackground from "../functions/renderBokehBackground";
-import renderSolidColorBackground from "../functions/renderSolidColorBackground";
-import renderUnprocessedVideo from "../functions/renderUnprocessedVideo";
+import React from "react";
 import useBodyPix from "../hooks/useBodyPix";
+import useOnRenderBackgroundCallback from "../hooks/useOnRenderBackgroundCallback";
+import useOnRenderForegroundCallback from "../hooks/useOnRenderForegroundCallback";
 
 /**
  * Renders a processed video stream to a canvas.
@@ -24,59 +21,19 @@ export default function BodyPixCompositor({
 }) {
   const [bodyPix, net] = useBodyPix();
 
-  /**
-   * A callback function that handles a canvas ref and a video ref.
-   *
-   * @function
-   * @param {*} canvasElement The target canvas element.
-   * @param {*} videoElement The source video element.
-   */
-  const handleOnRenderBackground = useCallback(
-    (canvasElement, videoElement) => {
-      if (background === "blur") {
-        return renderBokehBackground(
-          3,
-          bodyPix,
-          canvasElement,
-          1,
-          net,
-          videoElement
-        );
-      }
-
-      const backgroundColor = colorString.get.rgb(background);
-      if (backgroundColor) {
-        return renderSolidColorBackground(
-          bodyPix,
-          canvasElement,
-          backgroundColor,
-          net,
-          videoElement
-        );
-      }
-
-      // TODO get element type
-      const elementType = "";
-      if (elementType) {
-        //   TODO render background image or video from element
-        return console.log(elementType);
-      }
-
-      console.warn(
-        "Falling back to default renderer; %s is not a valid background value.",
-        background
-      );
-
-      renderUnprocessedVideo(canvasElement, videoElement);
-    },
-    [background, bodyPix, net]
+  const onRenderBackgroundCallback = useOnRenderBackgroundCallback(
+    background,
+    bodyPix,
+    net
   );
+  const onRenderForegroundCallback = useOnRenderForegroundCallback(foreground);
 
   return (
     <Compositor
       fps={fps}
       onCaptureStream={onCaptureStream}
-      onRenderBackground={background ? handleOnRenderBackground : undefined}
+      onRenderBackground={background ? onRenderBackgroundCallback : undefined}
+      onRenderForeground={foreground ? onRenderForegroundCallback : undefined}
       style={style}
       videoTrackConstraints={videoTrackConstraints}
     />
@@ -84,11 +41,11 @@ export default function BodyPixCompositor({
 }
 
 BodyPixCompositor.propTypes = {
-  /** The number of pixels to blur the background (only used while blur === true) */
-  backgroundBlurAmount: PropTypes.number,
+  /** The type of background to use. Supports a CSS color string, `"blur"`, a path to an image or video file, or a `<canvas />`, `<img />`, or `< video/>` element. */
+  background: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
 
-  /** The number of pixels to blur the edges (only used while blur === true) */
-  edgeBlurAmount: PropTypes.number,
+  /** The type of foreground to use. */
+  foreground: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
 
   /** The target number of renders per second. */
   fps: PropTypes.number,
