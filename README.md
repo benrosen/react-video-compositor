@@ -12,12 +12,16 @@ A flexible React video component for virtual backgrounds, foreground effects, an
 
 ### Install
 
-`npm i react-video-compositor`
+```shell
+npm i react-video-compositor
+```
 
 ### Import
 
+Add the following line to the top of your `index.js` file.
+
 ```javascript
-import { VideoCompositor } from "react-video-compositor";
+import * as tfjs from "@tensorflow/tfjs";
 ```
 
 ### Implement
