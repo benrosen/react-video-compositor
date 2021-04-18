@@ -1,125 +1,80 @@
-import * as bodyPix from "@tensorflow-models/body-pix";
-
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useRef, useState } from "react";
 
 import PropTypes from "prop-types";
+import renderUnprocessedVideo from "../functions/renderUnprocessedVideo";
 import useInterval from "../hooks/useInterval";
+import useVideoStream from "../hooks/useVideoStream";
 
 /**
- * Renders a video stream to a `canvas` element.
+ * Renders a video stream to a canvas and provides callback functions for background and foreground effects.
  *
- * @todo additional support for formats for background/foreground: color (hex, rgb, rgba, object), ImageData, ImageElement, VideoElement, MediaStream
- * @todo background image path
- * @todo foreground image path
- * @todo onRenderBackground & backgroundRenderers array [{key: (segmentation) => media for canvas }] & background="key"
- *
- * @deprecated
- *
- * https://dannadori.medium.com/virtual-background-with-amazon-chime-sdk-bodypix-23fb59ac8c64
- * https://github.com/FLECT-DEV-TEAM/LocalVideoEffector
- * https://blog.tensorflow.org/2019/11/updated-bodypix-2.html
- * https://blog.logrocket.com/responsive-camera-component-react-hooks/
- * https://github.com/vinooniv/video-bg-blur/blob/master/index.html
- * https://github.com/vinooniv/video-bg-blur/blob/master/js/video.js
- * https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API
- * https://developer.mozilla.org/en-US/docs/Web/HTML/Element/video
+ * @see useInterval for more on how the render loop works.
+ * @see useVideoStream for more on how to return a MediaStream from a video device.
  */
-export default function VideoCompositor({
-  background,
-  blur,
-  foreground,
+export default function Compositor({
   fps = 30,
-  maxHeight,
-  maxWidth,
-  minHeight,
-  minWidth,
   onCaptureStream,
+  onRenderBackground,
+  onRenderForeground,
+  style,
+  videoTrackConstraints,
 }) {
-  const BACKGROUND_BLUR_AMOUNT = 3;
-  const EDGE_BLUR_AMOUNT = 1;
-
   const canvasElement = useRef();
   const videoElement = useRef();
 
   const [hasLoadedVideoData, setHasLoadedVideoData] = useState();
-  const [net, setNet] = useState();
   const [{ width, height }, setVideoSettings] = useState({
     width: undefined,
     height: undefined,
   });
 
-  useEffect(() => {
-    bodyPix.load().then((net) => {
-      setNet(net);
-    });
+  /**
+   * A callback function that is passed the newly-loaded MediaStream.
+   *
+   * @function
+   * @param {MediaStream} stream The MediaStream that was loaded from the video device.
+   */
+  const handleOnLoadedVideoStream = useCallback(
+    (stream) => {
+      setVideoSettings(() => {
+        return stream.getVideoTracks()[0].getSettings();
+      });
+      videoElement.current.srcObject = stream;
+      if (onCaptureStream) {
+        onCaptureStream(canvasElement.current.captureStream(fps));
+      }
+    },
+    [fps, onCaptureStream]
+  );
+
+  /**
+   * A callback function that is invoked before loading the MediaStream.
+   *
+   * @function
+   */
+  const handleOnLoadingVideoStream = useCallback(() => {
+    setHasLoadedVideoData(false);
   }, []);
 
-  useEffect(() => {
-    setHasLoadedVideoData(false);
-    navigator.mediaDevices
-      .getUserMedia({
-        audio: false,
-        video: true,
-      })
-      .then((mediaStream) => {
-        setVideoSettings(() => {
-          return mediaStream.getVideoTracks()[0].getSettings();
-        });
-        videoElement.current.srcObject = mediaStream;
-        onCaptureStream(canvasElement.current.captureStream(fps));
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  }, [blur, onCaptureStream, fps]);
+  useVideoStream(
+    handleOnLoadedVideoStream,
+    handleOnLoadingVideoStream,
+    videoTrackConstraints
+  );
 
-  useInterval(fps, async () => {
+  useInterval(fps, () => {
     if (!hasLoadedVideoData) {
       return;
     }
-    if (net && (background || blur)) {
-      const segmentation = await net.segmentPerson(videoElement.current);
-      if (background) {
-        const canvasContext = canvasElement.current.getContext("2d");
-        const maskImageData = bodyPix.toMask(
-          segmentation,
-          { r: 0, g: 0, b: 0, a: 0 },
-          { r: 255, g: 0, b: 255, a: 255 }
-        );
-        // TODO combine maskImageData with backgroundImage to create backgroundImageData
-        const backgroundImageData = maskImageData;
-        canvasContext.putImageData(backgroundImageData, 0, 0);
-        canvasContext.globalCompositeOperation = "destination-over";
-        canvasContext.drawImage(
-          videoElement.current,
-          0,
-          0,
-          canvasElement.current.width,
-          canvasElement.current.height
-        );
-        canvasContext.globalCompositeOperation = "source-over";
-      } else if (blur) {
-        bodyPix.drawBokehEffect(
-          canvasElement.current,
-          videoElement.current,
-          segmentation,
-          BACKGROUND_BLUR_AMOUNT,
-          EDGE_BLUR_AMOUNT
-        );
-      }
+
+    if (onRenderBackground) {
+      onRenderBackground(canvasElement, videoElement);
     } else {
-      canvasElement.current
-        .getContext("2d")
-        .drawImage(
-          videoElement.current,
-          0,
-          0,
-          canvasElement.current.width,
-          canvasElement.current.height
-        );
+      renderUnprocessedVideo(canvasElement, videoElement);
     }
-    if (foreground) {
-      // draw foreground
+
+    if (onRenderForeground) {
+      onRenderForeground(canvasElement, videoElement);
     }
   });
 
@@ -129,11 +84,8 @@ export default function VideoCompositor({
         alignItems: "center",
         display: "flex",
         justifyContent: "center",
-        maxHeight: maxHeight,
-        maxWidth: maxWidth,
-        minHeight: minHeight,
-        minWidth: minWidth,
         overflow: "hidden",
+        ...style,
       }}
     >
       <video
@@ -156,36 +108,27 @@ export default function VideoCompositor({
         ref={canvasElement}
         style={{ border: "1px dotted magenta" }}
         width={`${width}`}
-      ></canvas>
+      />
     </div>
   );
 }
 
-VideoCompositor.propTypes = {
-  /** The path to the background image. */
-  background: PropTypes.string,
-
-  /** Specify whether the background should be blurred. */
-  blur: PropTypes.bool,
-
-  /** The path to the foreground image. */
-  foreground: PropTypes.string,
-
-  /** The number of times per second to capture the MediaStream. */
+Compositor.propTypes = {
+  /** The target number of renders per second. */
   fps: PropTypes.number,
 
-  /** The max height of the element in pixels */
-  maxHeight: PropTypes.oneOf([PropTypes.number, PropTypes.string]),
-
-  /** The max width of the element */
-  maxWidth: PropTypes.oneOf([PropTypes.number, PropTypes.string]),
-
-  /** The min height of the element */
-  minHeight: PropTypes.oneOf([PropTypes.number, PropTypes.string]),
-
-  /** The min width of the element */
-  minWidth: PropTypes.oneOf([PropTypes.number, PropTypes.string]),
-
-  /** A callback function for handling the captured MediaStream. */
+  /** A callback function that handles a MediaStream. */
   onCaptureStream: PropTypes.func,
+
+  /** A callback function that handles a canvas ref and a video ref. */
+  onRenderBackground: PropTypes.func,
+
+  /** A callback function that handles a canvas ref and a video ref. */
+  onRenderForeground: PropTypes.func,
+
+  /** CSS styles to apply to this component. */
+  style: PropTypes.object,
+
+  /** A set of capabilities and the value or values each can take on. */
+  videoTrackConstraints: PropTypes.object,
 };
