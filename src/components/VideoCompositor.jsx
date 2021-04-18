@@ -114,7 +114,7 @@ export default function VideoCompositor({
   );
 }
 
-Compositor.propTypes = {
+VideoCompositor.propTypes = {
   /** The target number of renders per second. */
   fps: PropTypes.number,
 
