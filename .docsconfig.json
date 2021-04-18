@@ -1,0 +1,16 @@
+{
+  "opts": {
+    "destination": "./docs/",
+    "recurse": true,
+    "template": "node_modules/docdash"
+  },
+  "recurseDepth": 10,
+  "source": {
+    "excludePattern": "node_modules",
+    "includePattern": ".+\\.js(doc|x)?$",
+    "include": ["README.md", "./src/"]
+  },
+  "templates": {
+    "referenceTitle": "react-video-compositor"
+  }
+}
