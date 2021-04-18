@@ -1,12 +1,12 @@
 # react-video-compositor
 
-A flexible React video component that supports virtual backgrounds, foreground effects, and bokeh background blur.
+A flexible React video component for virtual backgrounds, foreground effects, and bokeh background blur.
 
 ## Resources
 
-- Code:
-- Docs:
-- NPM:
+- Repository: https://github.com/benrosen/react-video-compositor
+- Documentation: https://benrosen.github.io/react-video-compositor
+- Package: https://www.npmjs.com/package/react-video-compositor
 
 ## Getting Started
 
