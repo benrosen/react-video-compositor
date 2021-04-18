@@ -1,0 +1,4 @@
+import renderSolidColorBackground from "functions/renderSolidColorBackground";
+import theFileShouldExportAFunction from "tests/theFileShouldExportAFunction";
+
+theFileShouldExportAFunction(renderSolidColorBackground);
