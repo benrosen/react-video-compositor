@@ -8,8 +8,11 @@ import useOnRenderForegroundCallback from "../hooks/useOnRenderForegroundCallbac
 /**
  * Renders a processed video stream to a canvas.
  *
- * @see VideoCompositor for more on the base component type for `BodyPixCompositor`.
- * @see useBodyPix for more on loading a model from BodyPix.
+ * @module BodyPixCompositor
+ * @see module:VideoCompositor
+ * @see module:useBodyPix
+ * @see module:useOnRenderBackgroundCallback
+ * @see module:useOnRenderForegroundCallback
  */
 export default function BodyPixCompositor({
   background,

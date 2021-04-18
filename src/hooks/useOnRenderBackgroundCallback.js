@@ -11,6 +11,7 @@ import { useCallback } from "react";
 /**
  * Render a background.
  *
+ * @module useOnRenderBackgroundCallback
  * @param {string|HTMLElement} background The type of background to use. Supports a CSS color string, `"blur"`, a path to an image or video file, or a `<canvas />`, `<img />`, or `< video/>` element.
  * @param {*} bodyPix The BodyPix SDK.
  * @param {*} net The net loaded from BodyPix.
