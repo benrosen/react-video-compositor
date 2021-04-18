@@ -22,7 +22,7 @@ import { VideoCompositor } from "react-video-compositor";
 
 ### Implement
 
-The following example shows a `VideoCompositor` component that has been configured to render 60 times per second.
+The following example shows a `BodyPixCompositor` component that has been configured to render 60 times per second.
 
 The rendered video will have a blurred background and will be overlaid with an image from a file.
 
@@ -30,11 +30,11 @@ The `onCaptureStream` callback will be used to log a `MediaStream` to the consol
 
 ```javascript
 import React from "react";
-import { VideoCompositor } from "react-video-compositor";
+import { BodyPixCompositor } from "react-video-compositor";
 
 export default function App() {
   return (
-    <VideoCompositor
+    <BodyPixCompositor
       background="blur"
       foreground="images/foreground.png"
       fps={60}
