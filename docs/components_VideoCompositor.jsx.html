@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+    <meta charset="utf-8">
+    <title>components/VideoCompositor.jsx - Documentation</title>
+    
+    
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc.css">
+    <script src="scripts/nav.js" defer></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav >
+    
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-BodyPixCompositor.html">BodyPixCompositor</a></li><li><a href="module-renderBokehBackground.html">renderBokehBackground</a></li><li><a href="module-renderSolidColorBackground.html">renderSolidColorBackground</a></li><li><a href="module-renderUnprocessedVideo.html">renderUnprocessedVideo</a></li><li><a href="module-useBodyPix.html">useBodyPix</a></li><li><a href="module-useInterval.html">useInterval</a></li><li><a href="module-useOnRenderBackgroundCallback.html">useOnRenderBackgroundCallback</a></li><li><a href="module-useOnRenderForegroundCallback.html">useOnRenderForegroundCallback</a></li><li><a href="module-useVideoStream.html">useVideoStream</a></li><li><a href="module-VideoCompositor.html">VideoCompositor</a></li></ul>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">components/VideoCompositor.jsx</h1>
+    
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React, { useCallback, useRef, useState } from "react";
+
+import PropTypes from "prop-types";
+import renderUnprocessedVideo from "../functions/renderUnprocessedVideo";
+import useInterval from "../hooks/useInterval";
+import useVideoStream from "../hooks/useVideoStream";
+
+/**
+ * Renders a video stream to a canvas and provides callback functions for background and foreground effects.
+ *
+ * @module VideoCompositor
+ * @see module:useInterval
+ * @see module:useVideoStream
+ */
+export default function VideoCompositor({
+  fps = 30,
+  onCaptureStream,
+  onRenderBackground,
+  onRenderForeground,
+  style,
+  videoTrackConstraints,
+}) {
+  const canvasElement = useRef();
+  const videoElement = useRef();
+
+  const [hasLoadedVideoData, setHasLoadedVideoData] = useState(false);
+  const [{ width, height }, setVideoSettings] = useState({
+    width: undefined,
+    height: undefined,
+  });
+
+  /**
+   * A callback function that is passed the newly-loaded MediaStream.
+   *
+   * @function
+   * @param {MediaStream} stream The MediaStream that was loaded from the video device.
+   */
+  const handleOnLoadedVideoStream = useCallback(
+    (stream) => {
+      setVideoSettings(() => {
+        return stream.getVideoTracks()[0].getSettings();
+      });
+      videoElement.current.srcObject = stream;
+      if (onCaptureStream) {
+        onCaptureStream(canvasElement.current.captureStream(fps));
+      }
+    },
+    [fps, onCaptureStream]
+  );
+
+  /**
+   * A callback function that is invoked before loading the MediaStream.
+   *
+   * @function
+   */
+  const handleOnLoadingVideoStream = useCallback(() => {
+    setHasLoadedVideoData(false);
+  }, []);
+
+  useVideoStream(
+    handleOnLoadedVideoStream,
+    handleOnLoadingVideoStream,
+    videoTrackConstraints
+  );
+
+  useInterval(fps, () => {
+    if (!hasLoadedVideoData) {
+      return;
+    }
+
+    if (onRenderBackground) {
+      onRenderBackground(canvasElement, videoElement);
+    } else {
+      renderUnprocessedVideo(canvasElement, videoElement);
+    }
+
+    if (onRenderForeground) {
+      onRenderForeground(canvasElement, videoElement);
+    }
+  });
+
+  return (
+    &lt;div
+      style={{
+        alignItems: "center",
+        display: "flex",
+        justifyContent: "center",
+        overflow: "hidden",
+        ...style,
+      }}
+    >
+      &lt;video
+        autoPlay
+        aria-hidden
+        height={height}
+        onLoadedData={() => {
+          setHasLoadedVideoData(true);
+        }}
+        muted
+        ref={videoElement}
+        style={{
+          opacity: 0,
+          position: "fixed",
+        }}
+        width={width}
+      />
+      &lt;canvas
+        height={`${height}`}
+        ref={canvasElement}
+        style={{ border: "1px dotted magenta" }}
+        width={`${width}`}
+      />
+    &lt;/div>
+  );
+}
+
+Compositor.propTypes = {
+  /** The target number of renders per second. */
+  fps: PropTypes.number,
+
+  /** A callback function that handles a MediaStream. */
+  onCaptureStream: PropTypes.func,
+
+  /** A callback function that handles a canvas ref and a video ref. */
+  onRenderBackground: PropTypes.func,
+
+  /** A callback function that handles a canvas ref and a video ref. */
+  onRenderForeground: PropTypes.func,
+
+  /** CSS styles to apply to this component. */
+  style: PropTypes.object,
+
+  /** A set of capabilities and the value or values each can take on. */
+  videoTrackConstraints: PropTypes.object,
+};
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+    
+    
+</div>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.6</a> on Sun Apr 18 2021 01:02:00 GMT-0400 (Eastern Daylight Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/polyfill.js"></script>
+<script src="scripts/linenumber.js"></script>
+
+
+
+</body>
+</html>

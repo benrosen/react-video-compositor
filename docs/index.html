@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+    <meta charset="utf-8">
+    <title>Home - Documentation</title>
+    
+    
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc.css">
+    <script src="scripts/nav.js" defer></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav >
+    
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-BodyPixCompositor.html">BodyPixCompositor</a></li><li><a href="module-renderBokehBackground.html">renderBokehBackground</a></li><li><a href="module-renderSolidColorBackground.html">renderSolidColorBackground</a></li><li><a href="module-renderUnprocessedVideo.html">renderUnprocessedVideo</a></li><li><a href="module-useBodyPix.html">useBodyPix</a></li><li><a href="module-useInterval.html">useInterval</a></li><li><a href="module-useOnRenderBackgroundCallback.html">useOnRenderBackgroundCallback</a></li><li><a href="module-useOnRenderForegroundCallback.html">useOnRenderForegroundCallback</a></li><li><a href="module-useVideoStream.html">useVideoStream</a></li><li><a href="module-VideoCompositor.html">VideoCompositor</a></li></ul>
+</nav>
+
+<div id="main">
+    
+
+    
+
+
+
+    
+
+
+    <section class="package">
+        <h3> </h3>		
+    </section>
+
+
+
+
+
+
+
+
+
+    
+
+
+
+    <section class="readme usertext">
+        <article><h1>react-video-compositor</h1>
+<p>A flexible React video component for virtual backgrounds, foreground effects, and bokeh background blur.</p>
+<h2>Resources</h2>
+<ul>
+<li>Repository: https://github.com/benrosen/react-video-compositor</li>
+<li>Documentation: https://benrosen.github.io/react-video-compositor</li>
+<li>Package: https://www.npmjs.com/package/react-video-compositor</li>
+</ul>
+<h2>Getting Started</h2>
+<h3>Install</h3>
+<p><code>npm i react-video-compositor</code></p>
+<h3>Import</h3>
+<pre class="prettyprint source lang-javascript"><code>import { VideoCompositor } from &quot;react-video-compositor&quot;;
+</code></pre>
+<h3>Implement</h3>
+<p>The following example shows a <code>VideoCompositor</code> component that has been configured to render 60 times per second.</p>
+<p>The rendered video will have a blurred background and will be overlaid with an image from a file.</p>
+<p>The <code>onCaptureStream</code> callback will be used to log a <code>MediaStream</code> to the console.</p>
+<pre class="prettyprint source lang-javascript"><code>import React from &quot;react&quot;;
+import { VideoCompositor } from &quot;react-video-compositor&quot;;
+
+export default function App() {
+  return (
+    &lt;VideoCompositor
+      background=&quot;blur&quot;
+      foreground=&quot;images/foreground.png&quot;
+      fps={60}
+      onCaptureStream={(stream) => {
+        console.log(stream);
+      }}
+      style={{
+        border: &quot;1px dotted magenta&quot;,
+        maxHeight: &quot;50%&quot;,
+        minHeight: &quot;10%&quot;,
+      }}
+    />
+  );
+}
+</code></pre>
+<p><strong>TIP:</strong> You can use the <code>onCaptureStream</code> callback to send the <code>MediaStream</code> argument to a service like the <a href="https://aws.amazon.com/chime/chime-sdk/">AWS Chime SDK</a>.</p>
+<h4>Configuring Virtual Backgrounds</h4>
+<p>The <code>background</code> prop can be used to configure virtual backgrounds for the video stream. The <code>background</code> prop accepts a variety of input types, including:</p>
+<ul>
+<li><a href="#raw-video">Bypass</a></li>
+<li><a href="#background-blur">Background Blur</a></li>
+<li><a href="#css-color-name">CSS Color Name</a></li>
+<li><a href="#hex-code">Hex Code</a></li>
+<li><a href="#rgba">RGBA</a></li>
+<li><a href="#image-element">Image Element</a></li>
+<li><a href="#video-element">Video Element</a></li>
+<li><a href="#image-path">Image Path</a></li>
+<li><a href="#video-path">Video Path</a></li>
+</ul>
+<h5>Bypass</h5>
+<pre class="prettyprint source lang-javascript"><code>import React from &quot;react&quot;;
+import { VideoCompositor } from &quot;react-video-compositor&quot;;
+
+export default function App() {
+  return &lt;VideoCompositor />;
+}
+</code></pre>
+<h5>Background Blur</h5>
+<pre class="prettyprint source lang-javascript"><code>import React from &quot;react&quot;;
+import { VideoCompositor } from &quot;react-video-compositor&quot;;
+
+export default function App() {
+  return &lt;VideoCompositor background=&quot;blur&quot; />;
+}
+</code></pre>
+<h5>CSS Color Name</h5>
+<pre class="prettyprint source lang-javascript"><code>import React from &quot;react&quot;;
+import { VideoCompositor } from &quot;react-video-compositor&quot;;
+
+export default function App() {
+  return &lt;VideoCompositor background=&quot;yellow&quot; />;
+}
+</code></pre>
+<h5>Hex Code</h5>
+<pre class="prettyprint source lang-javascript"><code>import React from &quot;react&quot;;
+import { VideoCompositor } from &quot;react-video-compositor&quot;;
+
+export default function App() {
+  return &lt;VideoCompositor background=&quot;#ffff00&quot; />;
+}
+</code></pre>
+<h5>RGBA</h5>
+<pre class="prettyprint source lang-javascript"><code>import React from &quot;react&quot;;
+import { VideoCompositor } from &quot;react-video-compositor&quot;;
+
+export default function App() {
+  return &lt;VideoCompositor background=&quot;rgba(255, 255, 0, 1)&quot; />;
+}
+</code></pre>
+<h5>Image Element</h5>
+<pre class="prettyprint source lang-javascript"><code>import React, { Fragement, useRef } from &quot;react&quot;;
+import { VideoCompositor } from &quot;react-video-compositor&quot;;
+
+export default function App() {
+  const imageElement = useRef();
+  return (
+    &lt;Fragment>
+      &lt;img ref={imageElement} />
+      &lt;VideoCompositor background={imageElement} />
+    &lt;/Fragment>
+  );
+}
+</code></pre>
+<h5>Video Element</h5>
+<pre class="prettyprint source lang-javascript"><code>import React, { Fragement, useRef } from &quot;react&quot;;
+import { VideoCompositor } from &quot;react-video-compositor&quot;;
+
+export default function App() {
+  const videoElement = useRef();
+  return (
+    &lt;Fragment>
+      &lt;video ref={videoElement} />
+      &lt;VideoCompositor background={videoElement} />
+    &lt;/Fragment>
+  );
+}
+</code></pre>
+<h5>Image Path</h5>
+<pre class="prettyprint source lang-javascript"><code>import React from &quot;react&quot;;
+import { VideoCompositor } from &quot;react-video-compositor&quot;;
+
+export default function App() {
+  return &lt;VideoCompositor background=&quot;images/background.png&quot; />;
+}
+</code></pre>
+<h5>Video Path</h5>
+<pre class="prettyprint source lang-javascript"><code>import React from &quot;react&quot;;
+import { VideoCompositor } from &quot;react-video-compositor&quot;;
+
+export default function App() {
+  return &lt;VideoCompositor background=&quot;videos/background.mp4&quot; />;
+}
+</code></pre>
+<h2>Bibliography</h2>
+<ul>
+<li>https://dannadori.medium.com/virtual-background-with-amazon-chime-sdk-bodypix-23fb59ac8c64</li>
+<li>https://github.com/FLECT-DEV-TEAM/LocalVideoEffector</li>
+<li>https://blog.tensorflow.org/2019/11/updated-bodypix-2.html</li>
+<li>https://blog.logrocket.com/responsive-camera-component-react-hooks/</li>
+<li>https://github.com/vinooniv/video-bg-blur/blob/master/index.html</li>
+<li>https://github.com/vinooniv/video-bg-blur/blob/master/js/video.js</li>
+<li>https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API</li>
+<li>https://developer.mozilla.org/en-US/docs/Web/HTML/Element/video</li>
+</ul></article>
+    </section>
+
+
+
+
+
+
+    
+    
+</div>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.6</a> on Sun Apr 18 2021 01:02:00 GMT-0400 (Eastern Daylight Time) using the <a href="https://github.com/clenemt/docdash">docdash</a> theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/polyfill.js"></script>
+<script src="scripts/linenumber.js"></script>
+
+
+
+</body>
+</html>
