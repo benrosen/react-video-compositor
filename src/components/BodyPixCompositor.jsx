@@ -1,6 +1,6 @@
-import Compositor from "./Compositor";
 import PropTypes from "prop-types";
 import React from "react";
+import VideoCompositor from "./VideoCompositor";
 import useBodyPix from "../hooks/useBodyPix";
 import useOnRenderBackgroundCallback from "../hooks/useOnRenderBackgroundCallback";
 import useOnRenderForegroundCallback from "../hooks/useOnRenderForegroundCallback";
@@ -8,7 +8,7 @@ import useOnRenderForegroundCallback from "../hooks/useOnRenderForegroundCallbac
 /**
  * Renders a processed video stream to a canvas.
  *
- * @see Compositor for more on the base component type for `BodyPixCompositor`.
+ * @see VideoCompositor for more on the base component type for `BodyPixCompositor`.
  * @see useBodyPix for more on loading a model from BodyPix.
  */
 export default function BodyPixCompositor({
@@ -29,7 +29,7 @@ export default function BodyPixCompositor({
   const onRenderForegroundCallback = useOnRenderForegroundCallback(foreground);
 
   return (
-    <Compositor
+    <VideoCompositor
       fps={fps}
       onCaptureStream={onCaptureStream}
       onRenderBackground={background ? onRenderBackgroundCallback : undefined}
