@@ -1,0 +1,4 @@
+import theFileShouldExportAFunction from "tests/theFileShouldExportAFunction";
+import useOnRenderForegroundCallback from "hooks/useOnRenderForegroundCallback";
+
+theFileShouldExportAFunction(useOnRenderForegroundCallback);
